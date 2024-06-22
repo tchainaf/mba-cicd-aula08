@@ -1,0 +1,11 @@
+[Unit]
+Description=CI/CD application test
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=python3 /home/ec2-user/my-flask-app/app.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
