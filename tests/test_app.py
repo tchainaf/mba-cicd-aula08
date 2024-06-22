@@ -1,6 +1,7 @@
 import pytest
 import sys
-sys.path.append('/workspaces/aula08/')
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))  # Adiciona o diretório raiz ao sys.path
 from app import app
 
 @pytest.fixture
