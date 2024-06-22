@@ -1,4 +1,5 @@
 import pytest
+import sys
 sys.path.append('/workspaces/aula08/')
 from app import app
 
