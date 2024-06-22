@@ -13,7 +13,8 @@ swagger = Swagger(app)
                 'type': 'object',
                 'properties': {
                     'result': {
-                        'type': 'number'
+                        'type': 'number',
+                        'example': 10  # Exemplo do resultado para documentação
                     }
                 }
             }
@@ -26,8 +27,8 @@ swagger = Swagger(app)
             'schema': {
                 'type': 'object',
                 'properties': {
-                    'a': {'type': 'number'},
-                    'b': {'type': 'number'}
+                    'a': {'type': 'number', 'example': 5},
+                    'b': {'type': 'number', 'example': 3}
                 },
                 'required': ['a', 'b']
             }
@@ -35,6 +36,13 @@ swagger = Swagger(app)
     ]
 })
 def add():
+    """
+    Endpoint para adicionar dois números.
+
+    ---
+    tags:
+      - Matemática
+    """
     data = request.get_json()
     result = data['a'] + data['b']
     return jsonify(result=result)
@@ -48,7 +56,8 @@ def add():
                 'type': 'object',
                 'properties': {
                     'result': {
-                        'type': 'number'
+                        'type': 'number',
+                        'example': 2
                     }
                 }
             }
@@ -61,8 +70,8 @@ def add():
             'schema': {
                 'type': 'object',
                 'properties': {
-                    'a': {'type': 'number'},
-                    'b': {'type': 'number'}
+                    'a': {'type': 'number', 'example': 5},
+                    'b': {'type': 'number', 'example': 3}
                 },
                 'required': ['a', 'b']
             }
@@ -70,6 +79,13 @@ def add():
     ]
 })
 def subtract():
+    """
+    Endpoint para subtrair dois números.
+
+    ---
+    tags:
+      - Matemática
+    """
     data = request.get_json()
     result = data['a'] - data['b']
     return jsonify(result=result)
@@ -83,7 +99,8 @@ def subtract():
                 'type': 'object',
                 'properties': {
                     'result': {
-                        'type': 'number'
+                        'type': 'number',
+                        'example': 15
                     }
                 }
             }
@@ -96,8 +113,8 @@ def subtract():
             'schema': {
                 'type': 'object',
                 'properties': {
-                    'a': {'type': 'number'},
-                    'b': {'type': 'number'}
+                    'a': {'type': 'number', 'example': 5},
+                    'b': {'type': 'number', 'example': 3}
                 },
                 'required': ['a', 'b']
             }
@@ -105,6 +122,13 @@ def subtract():
     ]
 })
 def multiply():
+    """
+    Endpoint para multiplicar dois números.
+
+    ---
+    tags:
+      - Matemática
+    """
     data = request.get_json()
     result = data['a'] * data['b']
     return jsonify(result=result)
@@ -118,7 +142,8 @@ def multiply():
                 'type': 'object',
                 'properties': {
                     'result': {
-                        'type': 'number'
+                        'type': 'number',
+                        'example': 2.5
                     }
                 }
             }
@@ -131,8 +156,8 @@ def multiply():
             'schema': {
                 'type': 'object',
                 'properties': {
-                    'a': {'type': 'number'},
-                    'b': {'type': 'number'}
+                    'a': {'type': 'number', 'example': 10},
+                    'b': {'type': 'number', 'example': 4}
                 },
                 'required': ['a', 'b']
             }
@@ -140,6 +165,13 @@ def multiply():
     ]
 })
 def divide():
+    """
+    Endpoint para dividir dois números.
+
+    ---
+    tags:
+      - Matemática
+    """
     data = request.get_json()
     result = data['a'] / data['b']
     return jsonify(result=result)
