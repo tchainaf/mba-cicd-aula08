@@ -94,15 +94,14 @@ jobs:
         chmod 600 key.pem
         scp -i key.pem -r ./* $EC2_USER@$EC2_HOST:/home/$EC2_USER/my-flask-app
         ssh -i key.pem $EC2_USER@$EC2_HOST << 'EOF'
-          cd /home/$EC2_USER/my-flask-app
-          cp my-flask-app.service /etc/systemd/system/my-flask-app.service
+          cp /home/$EC2_USER/my-flask-app/my-flask-app.service /etc/systemd/system/my-flask-app.service
           sudo systemctl enable my-flask-app
           sudo systemctl stop my-flask-app
 
-          chmod 700 setup.sh
-          ./setup.sh
-          pip install -r requirements.txt
+          chmod 700 /home/$EC2_USER/my-flask-app/setup.sh
+          /home/$EC2_USER/my-flask-app/setup.sh
+          pip install -r /home/$EC2_USER/my-flask-app/requirements.txt
           
-          nohup python3 app.py > app.log 2>&1 &
+          nohup python3 /home/$EC2_USER/my-flask-app/app.py > /home/$EC2_USER/my-flask-app/app.log 2>&1 &
           sudo systemctl start my-flask-app
         EOF
