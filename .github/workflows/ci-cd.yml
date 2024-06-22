@@ -116,4 +116,4 @@ jobs:
           pip install -r requirements.txt
           nohup python app.py > app.log 2>&1 &
           sudo systemctl start my-flask-app
-EOF
+        EOF
