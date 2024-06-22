@@ -92,11 +92,12 @@ jobs:
         ssh-keyscan -H $EC2_HOST >> ~/.ssh/known_hosts
         echo "$SSH_KEY" > key.pem
         chmod 600 key.pem
+        ssh -i key.pem $EC2_USER@$EC2_HOST "mkdir -p /home/$EC2_USER/my-flask-app"
         scp -i key.pem -r ./* $EC2_USER@$EC2_HOST:/home/$EC2_USER/my-flask-app
         ssh -i key.pem $EC2_USER@$EC2_HOST << 'EOF'
-          sudo systemctl stop my-flask-app
           cd /home/$EC2_USER/my-flask-app
+          ./setup.sh
           pip install -r requirements.txt
-          nohup python app.py > app.log 2>&1 &
-          sudo systemctl start my-flask-app
+          nohup python3 app.py > app.log 2>&1 &
+          python3 /home/$EC2_USER/my-flask-app/app.py
         EOF
