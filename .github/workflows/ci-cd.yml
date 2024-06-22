@@ -87,21 +87,22 @@ jobs:
         SSH_KEY: ${{ secrets.SSH_KEY }}
         EC2_USER: ${{ secrets.EC2_USER }}
         EC2_HOST: ${{ secrets.EC2_HOST }}
+        APP_PATH: /home/${{ secrets.EC2_USER }}/my-flask-app
       run: |
         mkdir -p ~/.ssh
         ssh-keyscan -H $EC2_HOST >> ~/.ssh/known_hosts
         echo "$SSH_KEY" > key.pem
         chmod 600 key.pem
-        scp -i key.pem -r ./* $EC2_USER@$EC2_HOST:/opt/app/my-flask-app
+        scp -i key.pem -r ./* $EC2_USER@$EC2_HOST:/$APP_PATH
         ssh -i key.pem $EC2_USER@$EC2_HOST << 'EOF'
-          cp /opt/app/my-flask-app/my-flask-app.service /etc/systemd/system/my-flask-app.service
+          curl -O https://bootstrap.pypa.io/get-pip.py
+          python3 get-pip.py
+
+          cp /$APP_PATH/my-flask-app.service /etc/systemd/system/my-flask-app.service
           sudo systemctl enable my-flask-app
           sudo systemctl stop my-flask-app
 
-          chmod 700 /opt/app/my-flask-app/setup.sh
-          /opt/app/my-flask-app/setup.sh
-          pip install -r /opt/app/my-flask-app/requirements.txt
-          
-          nohup python3 /opt/app/my-flask-app/app.py > /opt/app/my-flask-app/app.log 2>&1 &
+          pip install -r /$APP_PATH/requirements.txt
+          nohup python3 /$APP_PATH/app.py > /$APP_PATH/app.log 2>&1 &
           sudo systemctl start my-flask-app
         EOF
