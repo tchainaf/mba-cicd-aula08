@@ -1,4 +1,5 @@
 import pytest
+sys.path.append('/workspaces/aula08/')
 from app import app
 
 @pytest.fixture
