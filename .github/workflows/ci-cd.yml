@@ -72,16 +72,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.9'
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-
     - name: Deploy to EC2
       env:
         SSH_KEY: ${{ secrets.SSH_KEY }}
@@ -93,16 +83,19 @@ jobs:
         ssh-keyscan -H $EC2_HOST >> ~/.ssh/known_hosts
         echo "$SSH_KEY" > key.pem
         chmod 600 key.pem
-        scp -i key.pem -r ./* $EC2_USER@$EC2_HOST:/$APP_PATH
+        scp -i key.pem -r ./* $EC2_USER@$EC2_HOST:/home/$EC2_USER/my-flask-app
         ssh -i key.pem $EC2_USER@$EC2_HOST << 'EOF'
           curl -O https://bootstrap.pypa.io/get-pip.py
           python3 get-pip.py
 
-          cp /$APP_PATH/my-flask-app.service /etc/systemd/system/my-flask-app.service
+          cd /home/${{ secrets.EC2_USER }}/my-flask-app
+          cp my-flask-app.service /etc/systemd/system/my-flask-app.service
           sudo systemctl enable my-flask-app
           sudo systemctl stop my-flask-app
 
-          pip install -r /$APP_PATH/requirements.txt
-          nohup python3 /$APP_PATH/app.py > /$APP_PATH/app.log 2>&1 &
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+          nohup python3 app.py > app.log 2>&1 &
           sudo systemctl start my-flask-app
         EOF
